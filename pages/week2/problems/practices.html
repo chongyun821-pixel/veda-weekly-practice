@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Week 2 Practices</title>
+  <style>
+    :root {
+      --bg: #f7f7f2;
+      --panel: #fffef8;
+      --text: #1f2937;
+      --muted: #667085;
+      --line: #d6d3c7;
+      --accent: #0f766e;
+      --accent-soft: #dff6f2;
+      --ok-bg: #ecfdf3;
+      --code-bg: #1f2937;
+      --terminal-bg: #111827;
+      --terminal-line: #334155;
+      --shadow: 0 20px 50px rgba(31, 41, 55, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Pretendard", "Noto Sans KR", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top right, rgba(15, 118, 110, 0.12), transparent 28%),
+        linear-gradient(180deg, #fafaf6 0%, #f0efe7 100%);
+    }
+
+    main {
+      width: min(1040px, calc(100% - 24px));
+      margin: 0 auto;
+      padding: 28px 0 56px;
+    }
+
+    .hero {
+      margin-bottom: 20px;
+      padding: 28px;
+      border-radius: 28px;
+      background: rgba(255, 254, 248, 0.92);
+      border: 1px solid rgba(214, 211, 199, 0.9);
+      box-shadow: var(--shadow);
+    }
+
+    .hero span {
+      display: inline-block;
+      margin-bottom: 12px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    h1, h2, h3 {
+      margin-top: 0;
+    }
+
+    h1 {
+      margin-bottom: 12px;
+      font-size: clamp(30px, 4vw, 46px);
+      line-height: 1.15;
+    }
+
+    .hero p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .summary {
+      display: grid;
+      gap: 16px;
+      margin-top: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+
+    .summary-card {
+      padding: 16px 18px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--panel);
+    }
+
+    .summary-card strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 14px;
+      color: var(--accent);
+    }
+
+    .practice {
+      margin-top: 20px;
+      padding: 24px;
+      border-radius: 24px;
+      border: 1px solid var(--line);
+      background: rgba(255, 254, 248, 0.96);
+      box-shadow: var(--shadow);
+    }
+
+    .practice h2 {
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    .practice p {
+      margin: 0 0 14px;
+      line-height: 1.8;
+      color: #374151;
+    }
+
+    .tips {
+      margin: 0 0 18px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: #f8fafc;
+      border: 1px solid #e5e7eb;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    pre {
+      margin: 0;
+      overflow-x: auto;
+      padding: 18px;
+      border-radius: 18px;
+      background: var(--code-bg);
+      color: #f9fafb;
+      font-size: 14px;
+      line-height: 1.7;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+    }
+
+    code {
+      font-family: "SFMono-Regular", Consolas, monospace;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 12px;
+      padding: 12px 16px;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .primary {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .secondary {
+      background: #e5e7eb;
+      color: #111827;
+    }
+
+    .result {
+      margin-top: 18px;
+      padding: 16px 18px;
+      border-radius: 16px;
+      border: 1px solid rgba(15, 118, 110, 0.18);
+      background: var(--ok-bg);
+    }
+
+    .result strong {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 18px;
+    }
+
+    .terminal {
+      margin: 0;
+      padding: 16px;
+      border-radius: 14px;
+      background: var(--terminal-bg);
+      color: #d1fae5;
+      font-size: 14px;
+      line-height: 1.8;
+      border: 1px solid var(--terminal-line);
+      white-space: pre-wrap;
+    }
+
+    .footer-note {
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 14px;
+      text-align: center;
+    }
+
+    @media (max-width: 720px) {
+      main {
+        width: min(100%, calc(100% - 16px));
+        padding-top: 16px;
+      }
+
+      .hero,
+      .practice {
+        padding: 18px;
+        border-radius: 20px;
+      }
+
+      pre,
+      .terminal {
+        font-size: 13px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="hero">
+      <span>2주차 실습 예제</span>
+      <h1>2주차 스택 메모리 예제</h1>
+
+      <div class="summary">
+        <div class="summary-card">
+          <strong>예제 1</strong>
+          스택 메모리 침범
+        </div>
+        <div class="summary-card">
+          <strong>예제 2</strong>
+          입력 버퍼 오버플로우
+        </div>
+      </div>
+    </section>
+
+    <section class="practice">
+      <h2>예제 1. 스택 메모리 침범</h2>
+      <p>포인터를 이용해 현재 변수 바깥의 스택 메모리를 건드릴 때 어떤 식으로 보일 수 있는지 설명하는 예제입니다.</p>
+      <div class="tips">주의: 이 코드는 정의되지 않은 동작입니다. 아래 출력은 학습용으로 정리한 예시일 뿐, 실제 결과는 실행 환경마다 달라질 수 있습니다.</div>
+      <pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    int a;              // 스택에 지역 변수 a 선언
+    int *pt = &a;       // a의 주소를 포인터에 저장
+
+    *pt = 1;            // 정상적으로 a에 값 1 저장
+    *(pt - 1) = 2;      // a보다 "앞쪽" 스택 메모리를 건드림 (정의되지 않은 동작)
+    *(pt - 2) = 3;      // 더 앞쪽 메모리 건드림
+    *(pt - 3) = 4;
+    *(pt - 4) = 5;
+
+    // 출력 시도
+    for (int i = 0; i &lt; 5; i++) {
+        printf("*(pt - %d) = %d\n", i, *(pt - i));
+    }
+
+    return 0;
+}</code></pre>
+
+      <div class="actions">
+        <button class="primary" data-action="run">실행하기</button>
+        <button class="secondary" data-action="reset">출력 지우기</button>
+      </div>
+
+      <div class="result" hidden>
+        <strong>이상적인 실행 결과</strong>
+        <pre class="terminal"></pre>
+      </div>
+    </section>
+
+    <section class="practice">
+      <h2>예제 2. 입력 버퍼 오버플로우</h2>
+      <p>문자 배열 크기보다 긴 입력을 받으면 옆 메모리까지 덮어쓸 수 있다는 점을 보여주는 예제입니다.<br/>고전적인 해킹 수법이기도 합니다.</p>
+      <div class="tips">주의: 이 코드는 정의되지 않은 위험한 코드입니다. 아래 출력은 <code>password</code>가 손상될 수 있음을 설명하기 위한 예시입니다.</div>
+      <pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    char id[10];   // 최대 9글자 + '\0' 저장 가능
+    char password[7] = "123456";
+
+    printf("아이디 입력: ");
+    scanf("%s", id); // 길이 제한 없음 → 10자 이상 입력 시 위험
+
+    printf("입력한 id: %s\n", id); // 운이 좋으면 비밀번호가 같이 나올 지도 모름
+    printf("원래 password: %s\n", password); // 운이 좋으면 비밀번호를 원하는데로 초기화할 수도 있다.
+
+    return 0;
+}</code></pre>
+
+      <div class="actions">
+        <button class="primary" data-action="run">실행하기</button>
+        <button class="secondary" data-action="reset">출력 지우기</button>
+      </div>
+
+      <div class="result" hidden>
+        <strong>이상적인 실행 결과</strong>
+        <pre class="terminal"></pre>
+      </div>
+    </section>
+    <p class="footer-note">컴퓨팅 환경에 따라 출력이 달라질 수 있습니다.</p>
+  </main>
+
+  <script>
+    const outputs = [
+      "*(pt - 0) = 1\n*(pt - 1) = 2\n*(pt - 2) = 3\n*(pt - 3) = 4\n*(pt - 4) = 5",
+      "아이디 입력: aaaaaaaaaahacked\n입력한 id: aaaaaaaaaahacked\n원래 password: hacked"
+    ];
+
+    function runPractice(section, output) {
+      const resultBox = section.querySelector(".result");
+      const terminal = section.querySelector(".terminal");
+
+      terminal.textContent = output;
+      resultBox.hidden = false;
+    }
+
+    function resetPractice(section) {
+      const resultBox = section.querySelector(".result");
+      const terminal = section.querySelector(".terminal");
+
+      terminal.textContent = "";
+      resultBox.hidden = true;
+    }
+
+    document.querySelectorAll(".practice").forEach((section, index) => {
+      section.addEventListener("click", (event) => {
+        const action = event.target.dataset.action;
+        if (!action) {
+          return;
+        }
+
+        if (action === "run") {
+          runPractice(section, outputs[index]);
+        }
+
+        if (action === "reset") {
+          resetPractice(section);
+        }
+      });
+    });
+  </script>
+</body>
+</html>
