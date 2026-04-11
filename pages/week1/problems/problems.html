@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Week 1 Problems</title>
+  <style>
+    :root {
+      --bg: #f7f7f2;
+      --panel: #fffef8;
+      --text: #1f2937;
+      --muted: #667085;
+      --line: #d6d3c7;
+      --accent: #0f766e;
+      --accent-soft: #dff6f2;
+      --ok-bg: #ecfdf3;
+      --bad-bg: #fef3f2;
+      --code: #111827;
+      --code-bg: #1f2937;
+      --blank-bg: #fff7d6;
+      --shadow: 0 20px 50px rgba(31, 41, 55, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Pretendard", "Noto Sans KR", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top right, rgba(15, 118, 110, 0.12), transparent 28%),
+        linear-gradient(180deg, #fafaf6 0%, #f0efe7 100%);
+    }
+
+    main {
+      width: min(1040px, calc(100% - 24px));
+      margin: 0 auto;
+      padding: 28px 0 56px;
+    }
+
+    .hero {
+      margin-bottom: 20px;
+      padding: 28px;
+      border-radius: 28px;
+      background: rgba(255, 254, 248, 0.92);
+      border: 1px solid rgba(214, 211, 199, 0.9);
+      box-shadow: var(--shadow);
+    }
+
+    .hero span {
+      display: inline-block;
+      margin-bottom: 12px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    h1, h2, h3 {
+      margin-top: 0;
+    }
+
+    h1 {
+      margin-bottom: 12px;
+      font-size: clamp(30px, 4vw, 46px);
+      line-height: 1.15;
+    }
+
+    .hero p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .summary {
+      display: grid;
+      gap: 16px;
+      margin-top: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+
+    .summary-card {
+      padding: 16px 18px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--panel);
+    }
+
+    .summary-card strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 14px;
+      color: var(--accent);
+    }
+
+    .problem {
+      margin-top: 20px;
+      padding: 24px;
+      border-radius: 24px;
+      border: 1px solid var(--line);
+      background: rgba(255, 254, 248, 0.96);
+      box-shadow: var(--shadow);
+    }
+
+    .problem h2 {
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    .problem p {
+      margin: 0 0 14px;
+      line-height: 1.8;
+      color: #374151;
+    }
+
+    .tips {
+      margin: 0 0 18px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: #f8fafc;
+      border: 1px solid #e5e7eb;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    pre {
+      margin: 0;
+      overflow-x: auto;
+      padding: 18px;
+      border-radius: 18px;
+      background: var(--code-bg);
+      color: #f9fafb;
+      font-size: 14px;
+      line-height: 1.7;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+    }
+
+    code {
+      font-family: "SFMono-Regular", Consolas, monospace;
+    }
+
+    .blank {
+      width: 112px;
+      margin: 0 4px;
+      padding: 6px 8px;
+      border: 1px solid #facc15;
+      border-radius: 10px;
+      background: var(--blank-bg);
+      font: inherit;
+      color: var(--code);
+    }
+
+    .blank.small {
+      width: 76px;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 12px;
+      padding: 12px 16px;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .primary {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .secondary {
+      background: #e5e7eb;
+      color: #111827;
+    }
+
+    .result {
+      margin-top: 18px;
+      padding: 16px 18px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: #fcfcf9;
+    }
+
+    .result strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 18px;
+    }
+
+    .feedback-list {
+      margin: 10px 0 0;
+      padding-left: 20px;
+      color: #374151;
+    }
+
+    .feedback-list li + li {
+      margin-top: 8px;
+    }
+
+    .correct {
+      background: var(--ok-bg);
+      border-color: rgba(21, 128, 61, 0.2);
+    }
+
+    .incorrect {
+      background: var(--bad-bg);
+      border-color: rgba(180, 35, 24, 0.18);
+    }
+
+    .footer-note {
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 14px;
+      text-align: center;
+    }
+
+    @media (max-width: 720px) {
+      main {
+        width: min(100%, calc(100% - 16px));
+        padding-top: 16px;
+      }
+
+      .hero,
+      .problem {
+        padding: 18px;
+        border-radius: 20px;
+      }
+
+      pre {
+        font-size: 13px;
+      }
+
+      .blank,
+      .blank.small {
+        width: 100%;
+        margin: 6px 0;
+        display: block;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="hero">
+      <span>Week 1 Interactive Practice</span>
+      <h1>빈칸 채우기로 익히는<br>C++ 스택과 버블 정렬</h1>
+      <p>
+        각 빈칸에 들어갈 코드를 단답형으로 입력한 뒤 채점 버튼을 눌러보세요.
+        정답은 공백을 무시하고 비교하므로, 핵심 코드만 정확히 쓰면 됩니다.
+      </p>
+
+      <div class="summary">
+        <div class="summary-card">
+          <strong>문제 1</strong>
+          C++ 클래스로 배열 기반 스택 구현
+        </div>
+        <div class="summary-card">
+          <strong>문제 2</strong>
+          오름차순 버블 정렬 구현
+        </div>
+        <div class="summary-card">
+          <strong>배포 URL</strong>
+          chongyun821-pixel.github.io/veda-weekly-practice
+        </div>
+      </div>
+    </section>
+
+    <section class="problem" data-problem="stack">
+      <h2>문제 1. 클래스 스택 구현</h2>
+      <p>배열을 사용하는 기본 스택 클래스입니다. 생성자, push, pop의 핵심 부분을 채워보세요.</p>
+      <div class="tips">힌트: 스택의 맨 위를 가리키는 인덱스는 비어 있을 때 <code>-1</code>에서 시작합니다.</div>
+      <pre><code>#include &lt;iostream&gt;
+using namespace std;
+
+class Stack {
+private:
+    int data[10];
+    int topIndex;
+
+public:
+    Stack() {
+        topIndex = <input class="blank small" data-answer="-1" aria-label="stack blank 1">;
+    }
+
+    void push(int value) {
+        if (topIndex == 9) {
+            cout &lt;&lt; "Stack Overflow" &lt;&lt; '\n';
+            return;
+        }
+        data[<input class="blank small" data-answer="++topIndex" aria-label="stack blank 2">] = value;
+    }
+
+    int pop() {
+        if (topIndex == -1) {
+            cout &lt;&lt; "Stack Underflow" &lt;&lt; '\n';
+            return -1;
+        }
+        return data[<input class="blank small" data-answer="topIndex--" aria-label="stack blank 3">];
+    }
+};</code></pre>
+
+      <div class="actions">
+        <button class="primary" data-action="grade">채점하기</button>
+        <button class="secondary" data-action="reset">입력 초기화</button>
+      </div>
+
+      <div class="result" hidden></div>
+    </section>
+
+    <section class="problem" data-problem="bubble">
+      <h2>문제 2. 버블 정렬 구현</h2>
+      <p>오름차순으로 정렬되도록 반복문 조건과 swap 부분을 채워보세요.</p>
+      <div class="tips">힌트: 큰 값이 뒤로 밀려나므로, 안쪽 반복문은 아직 정렬되지 않은 범위까지만 보면 됩니다.</div>
+      <pre><code>#include &lt;iostream&gt;
+using namespace std;
+
+void bubbleSort(int arr[], int n) {
+    for (int i = 0; i &lt; n - 1; i++) {
+        for (int j = 0; j &lt; <input class="blank small" data-answer="n - i - 1" aria-label="bubble blank 1">; j++) {
+            if (arr[j] &gt; arr[<input class="blank small" data-answer="j + 1" aria-label="bubble blank 2">]) {
+                int temp = arr[j];
+                arr[j] = arr[<input class="blank small" data-answer="j + 1" aria-label="bubble blank 3">];
+                arr[j + 1] = temp;
+            }
+        }
+    }
+}</code></pre>
+
+      <div class="actions">
+        <button class="primary" data-action="grade">채점하기</button>
+        <button class="secondary" data-action="reset">입력 초기화</button>
+      </div>
+
+      <div class="result" hidden></div>
+    </section>
+
+    <p class="footer-note">
+      티스토리에서는 아래 URL을 <code>iframe</code>으로 임베드하면 됩니다:
+      <code>https://chongyun821-pixel.github.io/veda-weekly-practice/pages/week1/problems/problems.html</code>
+    </p>
+  </main>
+
+  <script>
+    function normalize(value) {
+      return value.replace(/\s+/g, " ").trim();
+    }
+
+    function gradeProblem(section) {
+      const inputs = [...section.querySelectorAll(".blank")];
+      const resultBox = section.querySelector(".result");
+      const messages = [];
+      let correctCount = 0;
+
+      inputs.forEach((input, index) => {
+        const userAnswer = normalize(input.value);
+        const expectedAnswer = normalize(input.dataset.answer);
+        const isCorrect = userAnswer === expectedAnswer;
+
+        input.style.borderColor = isCorrect ? "rgba(21, 128, 61, 0.9)" : "rgba(180, 35, 24, 0.9)";
+        input.style.background = isCorrect ? "#ecfdf3" : "#fff1f2";
+
+        if (isCorrect) {
+          correctCount += 1;
+          messages.push((index + 1) + "번 빈칸 정답");
+        } else {
+          messages.push((index + 1) + "번 빈칸 오답, 정답: " + input.dataset.answer);
+        }
+      });
+
+      const total = inputs.length;
+      const isPerfect = correctCount === total;
+      resultBox.hidden = false;
+      resultBox.className = "result " + (isPerfect ? "correct" : "incorrect");
+      resultBox.innerHTML =
+        "<strong>" + correctCount + " / " + total + " 정답</strong>" +
+        "<div>" + (isPerfect ? "좋아요. 핵심 로직을 정확히 이해했습니다." : "조금만 더 다듬으면 됩니다. 아래 피드백을 확인해 보세요.") + "</div>" +
+        '<ul class="feedback-list"><li>' + messages.join("</li><li>") + "</li></ul>";
+    }
+
+    function resetProblem(section) {
+      const inputs = [...section.querySelectorAll(".blank")];
+      const resultBox = section.querySelector(".result");
+
+      inputs.forEach((input) => {
+        input.value = "";
+        input.style.borderColor = "#facc15";
+        input.style.background = "#fff7d6";
+      });
+
+      resultBox.hidden = true;
+      resultBox.className = "result";
+      resultBox.innerHTML = "";
+    }
+
+    document.querySelectorAll(".problem").forEach((section) => {
+      section.addEventListener("click", (event) => {
+        const action = event.target.dataset.action;
+        if (!action) {
+          return;
+        }
+
+        if (action === "grade") {
+          gradeProblem(section);
+        }
+
+        if (action === "reset") {
+          resetProblem(section);
+        }
+      });
+    });
+  </script>
+</body>
+</html>
