@@ -253,11 +253,11 @@
 <body>
   <main>
     <section class="hero">
-      <span>Week 1 Interactive Practice</span>
+      <span>1주차 연습문제</span>
       <h1>빈칸 채우기로 익히는<br>C++ 스택과 버블 정렬</h1>
       <p>
         각 빈칸에 들어갈 코드를 단답형으로 입력한 뒤 채점 버튼을 눌러보세요.
-        정답은 공백을 무시하고 비교하므로, 핵심 코드만 정확히 쓰면 됩니다.
+        실제 코딩테스트 문제는 아래 예제보다 어렵게 나올 수 있습니다.
       </p>
 
       <div class="summary">
@@ -269,36 +269,49 @@
           <strong>문제 2</strong>
           오름차순 버블 정렬 구현
         </div>
-        <div class="summary-card">
-          <strong>배포 URL</strong>
-          chongyun821-pixel.github.io/veda-weekly-practice
-        </div>
       </div>
     </section>
 
     <section class="problem" data-problem="stack">
       <h2>문제 1. 클래스 스택 구현</h2>
-      <p>배열을 사용하는 기본 스택 클래스입니다. 생성자, push, pop의 핵심 부분을 채워보세요.</p>
-      <div class="tips">힌트: 스택의 맨 위를 가리키는 인덱스는 비어 있을 때 <code>-1</code>에서 시작합니다.</div>
+      <p>동적 배열을 사용하는 스택 클래스입니다. 생성자, 자동 확장, 소멸자의 핵심 부분을 채워보세요.</p>
+      <div class="tips">힌트: 공간이 꽉 차면 기본 크기의 1.5배만큼 더 큰 메모리를 새로 확보하고, 기존 값을 복사한 뒤 이전 메모리를 해제합니다.</div>
       <pre><code>#include &lt;iostream&gt;
+#include &lt;cstdlib&gt;
 using namespace std;
 
 class Stack {
 private:
-    int data[10];
+    int* data;
     int topIndex;
+    int capacity;
 
 public:
-    Stack() {
+    Stack(int size = 10) {
+        capacity = size;
         topIndex = <input class="blank small" data-answer="-1" aria-label="stack blank 1">;
+        data = (int*)malloc(sizeof(int) * <input class="blank small" data-answer="capacity" aria-label="stack blank 2">);
+    }
+
+    ~Stack() {
+        <input class="blank wide" data-answer="free(data);" aria-label="stack blank 3">
     }
 
     void push(int value) {
-        if (topIndex == 9) {
-            cout &lt;&lt; "Stack Overflow" &lt;&lt; '\n';
-            return;
+        if (topIndex + 1 == capacity) {
+            int newCapacity = capacity + capacity / 2;
+            int* newData = (int*)malloc(sizeof(int) * newCapacity);
+
+            for (int i = 0; i &lt; capacity; i++) {
+                newData[i] = data[i];
+            }
+
+            <input class="blank wide" data-answer="free(data);" aria-label="stack blank 4">
+            data = newData;
+            capacity = <input class="blank small" data-answer="newCapacity" aria-label="stack blank 5">;
         }
-        data[<input class="blank small" data-answer="++topIndex" aria-label="stack blank 2">] = value;
+
+        data[<input class="blank small" data-answer="++topIndex" aria-label="stack blank 6">] = value;
     }
 
     int pop() {
@@ -306,7 +319,7 @@ public:
             cout &lt;&lt; "Stack Underflow" &lt;&lt; '\n';
             return -1;
         }
-        return data[<input class="blank small" data-answer="topIndex--" aria-label="stack blank 3">];
+        return data[<input class="blank small" data-answer="topIndex--" aria-label="stack blank 7">];
     }
 };</code></pre>
 
@@ -372,19 +385,20 @@ void bubbleSort(int arr[], int n) {
 
         if (isCorrect) {
           correctCount += 1;
-          messages.push((index + 1) + "번 빈칸 정답");
+          messages.push((index + 1) + "번 정답");
         } else {
-          messages.push((index + 1) + "번 빈칸 오답, 정답: " + input.dataset.answer);
+          messages.push((index + 1) + "번 오답, 정답: " + input.dataset.answer);
         }
       });
 
       const total = inputs.length;
       const isPerfect = correctCount === total;
+      const summaryText = isPerfect ? "" : "<div>아래 피드백을 확인해 보세요.</div>";
       resultBox.hidden = false;
       resultBox.className = "result " + (isPerfect ? "correct" : "incorrect");
       resultBox.innerHTML =
         "<strong>" + correctCount + " / " + total + " 정답</strong>" +
-        "<div>" + (isPerfect ? "좋아요. 핵심 로직을 정확히 이해했습니다." : "조금만 더 다듬으면 됩니다. 아래 피드백을 확인해 보세요.") + "</div>" +
+        summaryText +
         '<ul class="feedback-list"><li>' + messages.join("</li><li>") + "</li></ul>";
     }
 
