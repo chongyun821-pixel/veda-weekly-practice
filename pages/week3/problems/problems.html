@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Week 3 Problems</title>
+  <style>
+    :root {
+      --bg: #f7f7f2;
+      --panel: #fffef8;
+      --text: #1f2937;
+      --muted: #667085;
+      --line: #d6d3c7;
+      --accent: #0f766e;
+      --accent-soft: #dff6f2;
+      --ok-bg: #ecfdf3;
+      --bad-bg: #fef3f2;
+      --code-bg: #1f2937;
+      --code-text: #f9fafb;
+      --highlight-bg: rgba(45, 212, 191, 0.22);
+      --highlight-line: rgba(94, 234, 212, 0.75);
+      --shadow: 0 20px 50px rgba(31, 41, 55, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Pretendard", "Noto Sans KR", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top right, rgba(15, 118, 110, 0.12), transparent 28%),
+        linear-gradient(180deg, #fafaf6 0%, #f0efe7 100%);
+    }
+
+    main {
+      width: min(1040px, calc(100% - 24px));
+      margin: 0 auto;
+      padding: 28px 0 56px;
+    }
+
+    .hero {
+      margin-bottom: 20px;
+      padding: 28px;
+      border-radius: 28px;
+      background: rgba(255, 254, 248, 0.92);
+      border: 1px solid rgba(214, 211, 199, 0.9);
+      box-shadow: var(--shadow);
+    }
+
+    .hero span {
+      display: inline-block;
+      margin-bottom: 12px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    h1, h2, h3 {
+      margin-top: 0;
+    }
+
+    h1 {
+      margin-bottom: 12px;
+      font-size: clamp(30px, 4vw, 46px);
+      line-height: 1.15;
+    }
+
+    .hero p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .summary {
+      display: grid;
+      gap: 16px;
+      margin-top: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+
+    .summary-card {
+      padding: 16px 18px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--panel);
+    }
+
+    .summary-card strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 14px;
+      color: var(--accent);
+    }
+
+    .problem {
+      margin-top: 20px;
+      padding: 24px;
+      border-radius: 24px;
+      border: 1px solid var(--line);
+      background: rgba(255, 254, 248, 0.96);
+      box-shadow: var(--shadow);
+    }
+
+    .problem h2 {
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    .problem p {
+      margin: 0 0 14px;
+      line-height: 1.8;
+      color: #374151;
+    }
+
+    .tips {
+      margin: 0 0 18px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: #f8fafc;
+      border: 1px solid #e5e7eb;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .file-label {
+      display: inline-block;
+      margin-bottom: 10px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #eef2ff;
+      color: #4338ca;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    pre {
+      margin: 0;
+      overflow-x: auto;
+      padding: 18px;
+      border-radius: 18px;
+      background: var(--code-bg);
+      color: var(--code-text);
+      font-size: 14px;
+      line-height: 1.7;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+    }
+
+    code {
+      font-family: "SFMono-Regular", Consolas, monospace;
+    }
+
+    .hl {
+      display: block;
+      margin: 2px -8px;
+      padding: 0 8px;
+      border-left: 3px solid var(--highlight-line);
+      border-radius: 8px;
+      background: var(--highlight-bg);
+    }
+
+    .quiz {
+      margin-top: 18px;
+      padding: 18px;
+      border-radius: 18px;
+      border: 1px solid #e5e7eb;
+      background: #fcfcf9;
+    }
+
+    .quiz h3 {
+      margin-bottom: 10px;
+      font-size: 18px;
+    }
+
+    .choices {
+      display: grid;
+      gap: 10px;
+    }
+
+    .choice {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      padding: 12px 14px;
+      border: 1px solid #d1d5db;
+      border-radius: 14px;
+      background: #fff;
+      cursor: pointer;
+    }
+
+    .choice input {
+      margin-top: 2px;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 12px;
+      padding: 12px 16px;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .primary {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .secondary {
+      background: #e5e7eb;
+      color: #111827;
+    }
+
+    .result {
+      margin-top: 16px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: #fcfcf9;
+      display: none;
+    }
+
+    .result.correct {
+      display: block;
+      background: var(--ok-bg);
+      border-color: rgba(21, 128, 61, 0.18);
+    }
+
+    .result.incorrect {
+      display: block;
+      background: var(--bad-bg);
+      border-color: rgba(180, 35, 24, 0.18);
+    }
+
+    .result strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 17px;
+    }
+
+    .footer-note {
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 14px;
+      text-align: center;
+    }
+
+    @media (max-width: 720px) {
+      main {
+        width: min(100%, calc(100% - 16px));
+        padding-top: 16px;
+      }
+
+      .hero,
+      .problem {
+        padding: 18px;
+        border-radius: 20px;
+      }
+
+      pre {
+        font-size: 13px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="hero">
+      <span>3주차 연습문제</span>
+      <h1>객체지향 프로그래밍 핵심 개념</h1>
+      <p>
+        각 코드 블록에서 강조된 부분이 어떤 개념에 가장 가까운지 골라보세요.
+        선택지는 <code>추상화</code>, <code>캡슐화</code>, <code>상속성</code>, <code>다형성</code> 네 가지입니다.
+      </p>
+
+      <div class="summary">
+        <div class="summary-card">
+          <strong>예제 구성</strong>
+          Shape, Rectangle, Triangle, Circle 클래스로 보는 상속 구조
+        </div>
+        <div class="summary-card">
+          <strong>문제 형식</strong>
+          하이라이트된 코드 스니펫을 보고 10개의 4지선다형 문제 풀기
+        </div>
+        <div class="summary-card">
+          <strong>학습 포인트</strong>
+          추상화, 캡슐화, 상속성, 다형성의 차이를 코드 수준에서 구분하기
+        </div>
+      </div>
+    </section>
+
+    <section class="problem" data-problem="p1">
+      <h2>문제 1. 공통 부모 클래스 선언</h2>
+      <p>도형 클래스들의 공통 기반이 되는 헤더 파일입니다. 강조된 부분이 어떤 객체지향 개념에 가장 가까운지 골라보세요.</p>
+      <div class="tips">힌트: 여러 도형이 공유하는 공통 개념을 하나의 이름으로 묶는 역할을 합니다.</div>
+      <div class="file-label">shape.h</div>
+      <pre><code>#pragma once
+<span class="hl">class Shape {</span>
+private:
+    int area;
+public:
+    Shape();
+    int get_area(void);
+};</code></pre>
+      <div class="quiz">
+        <h3>하이라이트된 부분은 어떤 개념에 가장 가까울까요?</h3>
+        <div class="choices">
+          <label class="choice"><input type="radio" name="p1" value="abstraction"> 추상화</label>
+          <label class="choice"><input type="radio" name="p1" value="encapsulation"> 캡슐화</label>
+          <label class="choice"><input type="radio" name="p1" value="inheritance"> 상속성</label>
+          <label class="choice"><input type="radio" name="p1" value="polymorphism"> 다형성</label>
+        </div>
+        <div class="actions">
+          <button class="primary" onclick="checkAnswer('p1', 'abstraction', 'Shape는 여러 도형의 공통 성질을 묶어 표현하는 상위 개념이므로 추상화에 가장 가깝습니다.')">채점하기</button>
+          <button class="secondary" onclick="resetAnswer('p1')">다시 풀기</button>
+        </div>
+        <div class="result" id="result-p1"></div>
+      </div>
+    </section>
+
+    <section class="problem" data-problem="p2">
+      <h2>문제 2. 정보 숨기기</h2>
+      <p>도형의 넓이를 저장하는 멤버가 외부에서 직접 접근되지 않도록 숨겨져 있습니다.</p>
+      <div class="tips">힌트: 데이터와 접근 방식을 분리해 객체 내부 상태를 보호하는 개념입니다.</div>
+      <div class="file-label">shape.h</div>
+      <pre><code>#pragma once
+class Shape {
+<span class="hl">private:
+    int area;</span>
+public:
+    Shape();
+    int get_area(void);
+};</code></pre>
+      <div class="quiz">
+        <h3>하이라이트된 부분은 어떤 개념에 가장 가까울까요?</h3>
+        <div class="choices">
+          <label class="choice"><input type="radio" name="p2" value="abstraction"> 추상화</label>
+          <label class="choice"><input type="radio" name="p2" value="encapsulation"> 캡슐화</label>
+          <label class="choice"><input type="radio" name="p2" value="inheritance"> 상속성</label>
+          <label class="choice"><input type="radio" name="p2" value="polymorphism"> 다형성</label>
+        </div>
+        <div class="actions">
+          <button class="primary" onclick="checkAnswer('p2', 'encapsulation', 'private 멤버로 데이터를 숨기고 필요한 함수만 열어두는 것은 캡슐화의 대표적인 예입니다.')">채점하기</button>
+          <button class="secondary" onclick="resetAnswer('p2')">다시 풀기</button>
+        </div>
+        <div class="result" id="result-p2"></div>
+      </div>
+    </section>
+
+    <section class="problem" data-problem="p3">
+      <h2>문제 3. 사각형 클래스의 상속 선언</h2>
+      <p>Rectangle 클래스가 Shape를 기반으로 확장되는 구조를 보여주는 헤더입니다.</p>
+      <div class="tips">힌트: "Rectangle is a Shape"라는 관계를 코드로 표현한 부분입니다.</div>
+      <div class="file-label">Rectangle.h</div>
+      <pre><code>#pragma once
+#include "shape.h"
+<span class="hl">class Rectangle :
+    public Shape</span>
+{
+private:
+    int width, height;
+public:
+    Rectangle();
+    void set_width(int w);
+    int get_width();
+    void set_height(int h);
+    int get_height(void);
+};</code></pre>
+      <div class="quiz">
+        <h3>하이라이트된 부분은 어떤 개념에 가장 가까울까요?</h3>
+        <div class="choices">
+          <label class="choice"><input type="radio" name="p3" value="abstraction"> 추상화</label>
+          <label class="choice"><input type="radio" name="p3" value="encapsulation"> 캡슐화</label>
+          <label class="choice"><input type="radio" name="p3" value="inheritance"> 상속성</label>
+          <label class="choice"><input type="radio" name="p3" value="polymorphism"> 다형성</label>
+        </div>
+        <div class="actions">
+          <button class="primary" onclick="checkAnswer('p3', 'inheritance', 'public Shape로부터 기능과 성질을 물려받는 구조이므로 상속성입니다.')">채점하기</button>
+          <button class="secondary" onclick="resetAnswer('p3')">다시 풀기</button>
+        </div>
+        <div class="result" id="result-p3"></div>
+      </div>
+    </section>
+
+    <section class="problem" data-problem="p4">
+      <h2>문제 4. 삼각형 클래스의 상속 선언</h2>
+      <p>Triangle도 Shape를 기반으로 만들어진 도형 클래스입니다.</p>
+      <div class="tips">힌트: 사각형과 마찬가지로 공통 부모에서 출발해 새로운 도형을 만드는 방식입니다.</div>
+      <div class="file-label">Triangle.h</div>
+      <pre><code>#pragma once
+#include "shape.h"
+<span class="hl">class Triangle :
+    public Shape</span>
+{
+private:
+    int width, height;
+public:
+    Triangle();
+    void set_width(int w);
+    int get_width();
+    void set_height(int h);
+    int get_height(void);
+};</code></pre>
+      <div class="quiz">
+        <h3>하이라이트된 부분은 어떤 개념에 가장 가까울까요?</h3>
+        <div class="choices">
+          <label class="choice"><input type="radio" name="p4" value="abstraction"> 추상화</label>
+          <label class="choice"><input type="radio" name="p4" value="encapsulation"> 캡슐화</label>
+          <label class="choice"><input type="radio" name="p4" value="inheritance"> 상속성</label>
+          <label class="choice"><input type="radio" name="p4" value="polymorphism"> 다형성</label>
+        </div>
+        <div class="actions">
+          <button class="primary" onclick="checkAnswer('p4', 'inheritance', 'Triangle 역시 Shape를 물려받는 자식 클래스이므로 상속성에 해당합니다.')">채점하기</button>
+          <button class="secondary" onclick="resetAnswer('p4')">다시 풀기</button>
+        </div>
+        <div class="result" id="result-p4"></div>
+      </div>
+    </section>
+
+    <section class="problem" data-problem="p5">
+      <h2>문제 5. 원 클래스의 비공개 데이터</h2>
+      <p>반지름 값이 클래스 내부에 숨겨져 있고, 외부에서는 함수로만 접근하게 설계한 예시입니다.</p>
+      <div class="file-label">Circle.h</div>
+      <pre><code>#pragma once
+#include "shape.h"
+
+class Circle : public Shape
+{
+private:
+<span class="hl">    int radius;</span>
+public:
+    Circle();
+    void set_radius(int r);
+    int get_radius(void);
+};</code></pre>
+      <div class="quiz">
+        <h3>하이라이트된 부분은 어떤 개념에 가장 가까울까요?</h3>
+        <div class="choices">
+          <label class="choice"><input type="radio" name="p5" value="abstraction"> 추상화</label>
+          <label class="choice"><input type="radio" name="p5" value="encapsulation"> 캡슐화</label>
+          <label class="choice"><input type="radio" name="p5" value="inheritance"> 상속성</label>
+          <label class="choice"><input type="radio" name="p5" value="polymorphism"> 다형성</label>
+        </div>
+        <div class="actions">
+          <button class="primary" onclick="checkAnswer('p5', 'encapsulation', 'radius를 private으로 숨기고 setter/getter를 통해서만 접근하는 구조는 캡슐화입니다.')">채점하기</button>
+          <button class="secondary" onclick="resetAnswer('p5')">다시 풀기</button>
+        </div>
+        <div class="result" id="result-p5"></div>
+      </div>
+    </section>
+
+    <section class="problem" data-problem="p6">
+      <h2>문제 6. 같은 메시지 준비하기</h2>
+      <p>도형마다 넓이를 구하는 방식은 달라도, 모두 같은 이름의 함수로 표현할 수 있습니다.</p>
+      <div class="tips">힌트: 중요한 것은 함수 이름이 같고 객체에 따라 결과가 달라질 수 있다는 점입니다.</div>
+      <div class="file-label">도형별 넓이 함수 선언</div>
+      <pre><code>class Rectangle : public Shape {
+public:
+<span class="hl">    int get_area(void);</span>
+};
+
+class Triangle : public Shape {
+public:
+<span class="hl">    int get_area(void);</span>
+};
+
+class Circle : public Shape {
+public:
+<span class="hl">    int get_area(void);</span>
+};</code></pre>
+      <div class="quiz">
+        <h3>하이라이트된 부분은 어떤 개념에 가장 가까울까요?</h3>
+        <div class="choices">
+          <label class="choice"><input type="radio" name="p6" value="abstraction"> 추상화</label>
+          <label class="choice"><input type="radio" name="p6" value="encapsulation"> 캡슐화</label>
+          <label class="choice"><input type="radio" name="p6" value="inheritance"> 상속성</label>
+          <label class="choice"><input type="radio" name="p6" value="polymorphism"> 다형성</label>
+        </div>
+        <div class="actions">
+          <button class="primary" onclick="checkAnswer('p6', 'polymorphism', 'Rectangle, Triangle, Circle이 모두 같은 이름의 get_area() 메시지를 가지면서 서로 다른 결과를 낼 수 있으므로 다형성에 가장 가깝습니다.')">채점하기</button>
+          <button class="secondary" onclick="resetAnswer('p6')">다시 풀기</button>
+        </div>
+        <div class="result" id="result-p6"></div>
+      </div>
+    </section>
+
+    <section class="problem" data-problem="p7">
+      <h2>문제 7. 반지름 접근 함수</h2>
+      <p>원의 반지름은 외부에서 직접 건드리지 않고, 함수를 통해 읽고 바꾸도록 설계할 수 있습니다.</p>
+      <div class="tips">힌트: 데이터를 숨기고 접근 경로를 통제하는 구조에 주목해 보세요.</div>
+      <div class="file-label">Circle.h</div>
+      <pre><code>#pragma once
+#include "shape.h"
+
+class Circle : public Shape
+{
+private:
+    int radius;
+public:
+    Circle();
+<span class="hl">    void set_radius(int r);
+    int get_radius(void);</span>
+};</code></pre>
+      <div class="quiz">
+        <h3>하이라이트된 부분과 가장 관련 깊은 개념은 무엇일까요?</h3>
+        <div class="choices">
+          <label class="choice"><input type="radio" name="p7" value="abstraction"> 추상화</label>
+          <label class="choice"><input type="radio" name="p7" value="encapsulation"> 캡슐화</label>
+          <label class="choice"><input type="radio" name="p7" value="inheritance"> 상속성</label>
+          <label class="choice"><input type="radio" name="p7" value="polymorphism"> 다형성</label>
+        </div>
+        <div class="actions">
+          <button class="primary" onclick="checkAnswer('p7', 'encapsulation', 'private 데이터인 radius에 직접 접근하지 않고 set/get 함수로만 다루게 하는 구조는 캡슐화입니다.')">채점하기</button>
+          <button class="secondary" onclick="resetAnswer('p7')">다시 풀기</button>
+        </div>
+        <div class="result" id="result-p7"></div>
+      </div>
+    </section>
+
+    <section class="problem" data-problem="p8">
+      <h2>문제 8. 도형마다 다른 넓이 계산</h2>
+      <p>같은 <code>get_area()</code>라는 이름을 쓰더라도, 도형 종류에 따라 계산식은 달라집니다.</p>
+      <div class="tips">힌트: 함수 이름은 같지만 실제 계산 결과가 다르다는 점이 핵심입니다.</div>
+      <div class="file-label">도형별 get_area() 구현</div>
+      <pre><code>int Rectangle::get_area(void) {
+<span class="hl">    return width * height;</span>
+}
+
+int Triangle::get_area(void) {
+<span class="hl">    return width * height / 2;</span>
+}
+
+int Circle::get_area(void) {
+<span class="hl">    return static_cast&lt;int&gt;(radius * radius * 3.14);</span>
+}</code></pre>
+      <div class="quiz">
+        <h3>하이라이트된 부분은 어떤 개념에 가장 가까울까요?</h3>
+        <div class="choices">
+          <label class="choice"><input type="radio" name="p8" value="abstraction"> 추상화</label>
+          <label class="choice"><input type="radio" name="p8" value="encapsulation"> 캡슐화</label>
+          <label class="choice"><input type="radio" name="p8" value="inheritance"> 상속성</label>
+          <label class="choice"><input type="radio" name="p8" value="polymorphism"> 다형성</label>
+        </div>
+        <div class="actions">
+          <button class="primary" onclick="checkAnswer('p8', 'polymorphism', '모두 get_area()라는 같은 메시지를 사용하지만 Rectangle, Triangle, Circle이 서로 다른 계산 결과를 내므로 다형성입니다.')">채점하기</button>
+          <button class="secondary" onclick="resetAnswer('p8')">다시 풀기</button>
+        </div>
+        <div class="result" id="result-p8"></div>
+      </div>
+    </section>
+
+    <section class="problem" data-problem="p9">
+      <h2>문제 9. 같은 함수 이름으로 넓이 출력</h2>
+      <p>각 도형 객체는 모두 <code>get_area()</code>를 사용하지만, 출력되는 값은 객체에 따라 달라질 수 있습니다.</p>
+      <div class="tips">힌트: 같은 메시지, 다른 결과라는 표현과 가장 잘 맞는지 생각해 보세요.</div>
+      <div class="file-label">main.cpp</div>
+      <pre><code>cout &lt;&lt; "Rectangle 넓이 : " &lt;&lt; <span class="hl">r1.get_area()</span> &lt;&lt; endl;
+cout &lt;&lt; "Triangle 넓이 : " &lt;&lt; <span class="hl">t1.get_area()</span> &lt;&lt; endl;
+cout &lt;&lt; "Circle 넓이 : " &lt;&lt; <span class="hl">c1.get_area()</span> &lt;&lt; endl;</code></pre>
+      <div class="quiz">
+        <h3>하이라이트된 부분은 어떤 개념에 가장 가까울까요?</h3>
+        <div class="choices">
+          <label class="choice"><input type="radio" name="p9" value="abstraction"> 추상화</label>
+          <label class="choice"><input type="radio" name="p9" value="encapsulation"> 캡슐화</label>
+          <label class="choice"><input type="radio" name="p9" value="inheritance"> 상속성</label>
+          <label class="choice"><input type="radio" name="p9" value="polymorphism"> 다형성</label>
+        </div>
+        <div class="actions">
+          <button class="primary" onclick="checkAnswer('p9', 'polymorphism', 'r1, t1, c1은 모두 get_area()라는 같은 메시지를 사용하지만 도형마다 다른 넓이를 돌려주므로 다형성을 보여줍니다.')">채점하기</button>
+          <button class="secondary" onclick="resetAnswer('p9')">다시 풀기</button>
+        </div>
+        <div class="result" id="result-p9"></div>
+      </div>
+    </section>
+
+    <section class="problem" data-problem="p10">
+      <h2>문제 10. 공통 이름 아래 묶인 도형들</h2>
+      <p><code>Shape</code>라는 이름은 사각형, 삼각형, 원처럼 서로 다른 도형을 하나의 공통 개념으로 묶어 생각하게 해줍니다.</p>
+      <div class="tips">힌트: 여러 대상을 단순화된 하나의 개념으로 표현하는 방식입니다.</div>
+      <div class="file-label">도형 개념 정리</div>
+      <pre><code><span class="hl">Shape</span>
+ ├─ Rectangle
+ ├─ Triangle
+ └─ Circle</code></pre>
+      <div class="quiz">
+        <h3>하이라이트된 부분은 어떤 개념에 가장 가까울까요?</h3>
+        <div class="choices">
+          <label class="choice"><input type="radio" name="p10" value="abstraction"> 추상화</label>
+          <label class="choice"><input type="radio" name="p10" value="encapsulation"> 캡슐화</label>
+          <label class="choice"><input type="radio" name="p10" value="inheritance"> 상속성</label>
+          <label class="choice"><input type="radio" name="p10" value="polymorphism"> 다형성</label>
+        </div>
+        <div class="actions">
+          <button class="primary" onclick="checkAnswer('p10', 'abstraction', 'Rectangle, Triangle, Circle을 하나의 Shape라는 공통 개념으로 묶어 표현하는 것은 추상화입니다.')">채점하기</button>
+          <button class="secondary" onclick="resetAnswer('p10')">다시 풀기</button>
+        </div>
+        <div class="result" id="result-p10"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    function checkAnswer(problemId, correct, explanation) {
+      const selected = document.querySelector(`input[name="${problemId}"]:checked`);
+      const result = document.getElementById(`result-${problemId}`);
+
+      if (!selected) {
+        result.className = "result incorrect";
+        result.innerHTML = "<strong>선택이 필요해요</strong><div>먼저 보기 하나를 고른 뒤 채점해보세요.</div>";
+        return;
+      }
+
+      if (selected.value === correct) {
+        result.className = "result correct";
+        result.innerHTML = `<strong>정답입니다</strong><div>${explanation}</div>`;
+      } else {
+        result.className = "result incorrect";
+        result.innerHTML = `<strong>다시 생각해보세요</strong><div>${explanation}</div>`;
+      }
+    }
+
+    function resetAnswer(problemId) {
+      const checked = document.querySelector(`input[name="${problemId}"]:checked`);
+      const result = document.getElementById(`result-${problemId}`);
+      if (checked) {
+        checked.checked = false;
+      }
+      result.className = "result";
+      result.innerHTML = "";
+    }
+  </script>
+</body>
+</html>
