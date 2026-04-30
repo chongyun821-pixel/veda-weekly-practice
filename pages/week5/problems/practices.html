@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Week 5 Practices</title>
+  <style>
+    :root {
+      --bg: #f7f7f2;
+      --panel: #fffef8;
+      --text: #1f2937;
+      --muted: #667085;
+      --line: #d6d3c7;
+      --accent: #0f766e;
+      --accent-soft: #dff6f2;
+      --ok-bg: #ecfdf3;
+      --ok-line: #86efac;
+      --warn-bg: #fff7ed;
+      --warn-line: #fdba74;
+      --code-bg: #1f2937;
+      --shadow: 0 20px 50px rgba(31, 41, 55, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Pretendard", "Noto Sans KR", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top right, rgba(15, 118, 110, 0.12), transparent 28%),
+        linear-gradient(180deg, #fafaf6 0%, #f0efe7 100%);
+    }
+
+    main {
+      width: min(1040px, calc(100% - 24px));
+      margin: 0 auto;
+      padding: 28px 0 56px;
+    }
+
+    .hero {
+      margin-bottom: 20px;
+      padding: 28px;
+      border-radius: 28px;
+      background: rgba(255, 254, 248, 0.92);
+      border: 1px solid rgba(214, 211, 199, 0.9);
+      box-shadow: var(--shadow);
+    }
+
+    .hero span {
+      display: inline-block;
+      margin-bottom: 12px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    h1,
+    h2 {
+      margin-top: 0;
+    }
+
+    h1 {
+      margin-bottom: 12px;
+      font-size: clamp(30px, 4vw, 46px);
+      line-height: 1.15;
+    }
+
+    .hero p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .summary {
+      display: grid;
+      gap: 16px;
+      margin-top: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+
+    .summary-card {
+      padding: 16px 18px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--panel);
+    }
+
+    .summary-card strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 14px;
+      color: var(--accent);
+    }
+
+    .practice {
+      margin-top: 20px;
+      padding: 24px;
+      border-radius: 24px;
+      border: 1px solid var(--line);
+      background: rgba(255, 254, 248, 0.96);
+      box-shadow: var(--shadow);
+    }
+
+    .practice h2 {
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    .practice p {
+      margin: 0 0 14px;
+      line-height: 1.8;
+      color: #374151;
+    }
+
+    .tips {
+      margin: 0 0 18px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: #f8fafc;
+      border: 1px solid #e5e7eb;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    pre {
+      margin: 0;
+      overflow-x: auto;
+      padding: 18px;
+      border-radius: 18px;
+      background: var(--code-bg);
+      color: #f9fafb;
+      font-size: 14px;
+      line-height: 1.7;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+      white-space: pre-wrap;
+    }
+
+    .options {
+      display: grid;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .option {
+      width: 100%;
+      padding: 16px 18px;
+      border: 1px solid #d1d5db;
+      border-radius: 16px;
+      background: #ffffff;
+      color: #111827;
+      text-align: left;
+      font: inherit;
+      line-height: 1.7;
+      cursor: pointer;
+      transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .option:hover {
+      transform: translateY(-1px);
+      border-color: #94a3b8;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+    }
+
+    .option.selected {
+      border-color: #0f766e;
+      background: #f0fdfa;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .action-button {
+      border: 0;
+      border-radius: 12px;
+      padding: 12px 16px;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .primary {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .secondary {
+      background: #e5e7eb;
+      color: #111827;
+    }
+
+    .result {
+      display: none;
+      margin-top: 18px;
+      padding: 16px 18px;
+      border-radius: 16px;
+      line-height: 1.8;
+    }
+
+    .result.show {
+      display: block;
+    }
+
+    .result.correct {
+      border: 1px solid var(--ok-line);
+      background: var(--ok-bg);
+      color: #065f46;
+    }
+
+    .result.wrong {
+      border: 1px solid var(--warn-line);
+      background: var(--warn-bg);
+      color: #9a3412;
+    }
+
+    .result strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 18px;
+    }
+
+    .footer-note {
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 14px;
+      text-align: center;
+    }
+
+    @media (max-width: 720px) {
+      main {
+        width: min(100%, calc(100% - 16px));
+        padding-top: 16px;
+      }
+
+      .hero,
+      .practice {
+        padding: 18px;
+        border-radius: 20px;
+      }
+
+      pre {
+        font-size: 13px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="hero">
+      <span>5주차 실습 예제</span>
+      <h1>ARM32 코드 해석 문제</h1>
+
+      <div class="summary">
+        <div class="summary-card">
+          <strong>문제 유형</strong>
+          ARM 어셈블리 코드 해석
+        </div>
+        <div class="summary-card">
+          <strong>포인트</strong>
+          분기와 레지스터 역할 읽기
+        </div>
+      </div>
+    </section>
+
+    <section class="practice">
+      <h2>문제 1. 3의 배수 처리 코드</h2>
+      <p>아래 ARM 코드는 <code>R0</code>와 <code>R1</code>를 이용해 반복문을 돌면서 특정 시점에 <code>multiple_of_3</code> 라벨로 분기합니다. 이때 3의 배수를 찾았을 때 코드가 실제로 하는 동작을 가장 적절하게 고르세요.</p>
+      <pre><code>.global _start
+.text
+_start:
+    MOV R0, #1
+    MOV R1, #1
+
+loop:
+    CMP R0, #101
+    BEQ end_program
+
+    CMP R1, #3
+    BEQ multiple_of_3
+
+    ADD R0, R0, #1
+    ADD R1, R1, #1
+    B loop
+
+multiple_of_3: @3의 배수 숫자 처리
+    ADD R0, R0, #1
+    MOV R1, #1
+    B loop
+
+end_program:
+    BX LR</code></pre>
+
+      <div class="options" id="options">
+        <button class="option" data-choice="1">1. 다른 레지스터에 3의 배수가 몇 개 있는지 센다.</button>
+        <button class="option" data-choice="2">2. 유저에게 표준 출력으로 3의 배수를 확인했다는 메시지를 준다.</button>
+        <button class="option" data-choice="3">3. 아무것도 안 한다.</button>
+        <button class="option" data-choice="4">4. 프로그램을 종료한다.</button>
+      </div>
+
+      <div class="actions">
+        <button id="check-answer" class="action-button primary">정답 확인</button>
+        <button id="reset-answer" class="action-button secondary">다시 풀기</button>
+      </div>
+
+      <div id="result" class="result">
+        <strong id="result-title"></strong>
+        <p id="result-body" style="margin: 0;"></p>
+      </div>
+    </section>
+
+    <p class="footer-note">핵심은 3의 배수를 찾았을 때 출력이나 종료가 아니라, 다음 반복을 위해 레지스터를 어떻게 갱신하는지 읽는 것입니다.</p>
+  </main>
+
+  <script>
+    const options = document.querySelectorAll(".option");
+    const checkButton = document.getElementById("check-answer");
+    const resetButton = document.getElementById("reset-answer");
+    const result = document.getElementById("result");
+    const resultTitle = document.getElementById("result-title");
+    const resultBody = document.getElementById("result-body");
+
+    let selectedChoice = "";
+    const correctChoice = "3";
+
+    options.forEach((option) => {
+      option.addEventListener("click", () => {
+        selectedChoice = option.dataset.choice;
+        options.forEach((item) => item.classList.remove("selected"));
+        option.classList.add("selected");
+      });
+    });
+
+    checkButton.addEventListener("click", () => {
+      if (!selectedChoice) {
+        result.className = "result show wrong";
+        resultTitle.textContent = "선택지가 필요합니다";
+        resultBody.textContent = "먼저 1번부터 4번 중 하나를 선택한 뒤 정답 확인을 눌러 주세요.";
+        return;
+      }
+
+      if (selectedChoice === correctChoice) {
+        result.className = "result show correct";
+        resultTitle.textContent = "정답입니다: 3번";
+        resultBody.textContent = "multiple_of_3 라벨에서는 출력도 종료도 하지 않고, R0를 1 증가시키고 R1을 1로 초기화한 뒤 다시 loop로 돌아갑니다. 즉 3의 배수를 만났을 때 특별한 표시를 남기지 않고 다음 반복을 계속 준비하는 동작에 가깝습니다.";
+      } else {
+        result.className = "result show wrong";
+        resultTitle.textContent = "다시 생각해보면 좋아요";
+        resultBody.textContent = "이 구간에는 메시지를 출력하는 시스템 호출도 없고, end_program으로 바로 가지도 않습니다. multiple_of_3 안에서 실제로 하는 일은 R0 증가, R1 초기화, 그리고 다시 loop로 분기하는 것뿐입니다.";
+      }
+    });
+
+    resetButton.addEventListener("click", () => {
+      selectedChoice = "";
+      options.forEach((option) => option.classList.remove("selected"));
+      result.className = "result";
+      resultTitle.textContent = "";
+      resultBody.textContent = "";
+    });
+  </script>
+</body>
+</html>
