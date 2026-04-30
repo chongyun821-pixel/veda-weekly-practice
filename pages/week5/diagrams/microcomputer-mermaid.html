@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Week 5 Microcomputer Diagram</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background:
+        radial-gradient(circle at top right, rgba(15, 118, 110, 0.12), transparent 28%),
+        linear-gradient(180deg, #fafaf6 0%, #f0efe7 100%);
+      font-family: "Pretendard", "Noto Sans KR", sans-serif;
+      color: #1f2937;
+    }
+
+    main {
+      width: min(100%, 1100px);
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    .frame {
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(255, 254, 248, 0.96);
+      border: 1px solid #d6d3c7;
+      box-shadow: 0 20px 50px rgba(31, 41, 55, 0.08);
+    }
+
+    .title {
+      margin: 0 0 12px;
+      font-size: 16px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    #diagram {
+      min-height: 480px;
+    }
+
+    .note {
+      margin: 12px 0 0;
+      font-size: 13px;
+      line-height: 1.8;
+      color: #64748b;
+      text-align: center;
+    }
+  </style>
+  <script type="module">
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: "base",
+      securityLevel: "loose",
+      themeVariables: {
+        primaryColor: "#f8fafc",
+        primaryTextColor: "#0f172a",
+        primaryBorderColor: "#0f766e",
+        lineColor: "#475569",
+        secondaryColor: "#ecfeff",
+        tertiaryColor: "#fefce8",
+        fontFamily: "Pretendard, Noto Sans KR, sans-serif"
+      },
+      flowchart: {
+        htmlLabels: true,
+        curve: "basis"
+      }
+    });
+  </script>
+</head>
+<body>
+  <main>
+    <div class="frame">
+      <p class="title">마이크로컴퓨터 구성도</p>
+      <pre id="diagram" class="mermaid">flowchart TB
+    subgraph CPU["CPU"]
+        PC["PC<br/>Program Counter"]
+        DEC["Decoder"]
+        ALU["ALU"]
+        GPR["General Registers"]
+        SYSR["System Registers"]
+        PC -- 명령 주소 --> DEC
+        DEC -- 제어 신호 --> ALU
+        GPR <--> ALU
+        SYSR <--> DEC
+    end
+
+    ROM["ROM<br/>부팅 코드 / 명령 저장"]
+    RAM["RAM<br/>실행 중 데이터 / 스택"]
+    MAINBUS["Main Bus<br/>Address / Data / Control"]
+    LOCALBUS["Local Bus"]
+    UART["UART"]
+    PERI["Peripherals<br/>PWM / Sensor / Audio"]
+
+    ROM <--> MAINBUS
+    RAM <--> MAINBUS
+    CPU <--> MAINBUS
+    MAINBUS <--> LOCALBUS
+    LOCALBUS <--> UART
+    LOCALBUS <--> PERI</pre>
+    </div>
+  </main>
+</body>
+</html>
