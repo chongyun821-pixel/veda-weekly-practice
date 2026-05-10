@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Week 7 Problem</title>
+  <style>
+    :root {
+      --bg: #f7f7f2;
+      --panel: #fffef8;
+      --text: #1f2937;
+      --muted: #667085;
+      --line: #d6d3c7;
+      --accent: #0f766e;
+      --accent-soft: #dff6f2;
+      --ok-bg: #ecfdf3;
+      --ok-line: #86efac;
+      --bad-bg: #fff7ed;
+      --bad-line: #fdba74;
+      --code-bg: #1f2937;
+      --shadow: 0 20px 50px rgba(31, 41, 55, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Pretendard", "Noto Sans KR", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top right, rgba(15, 118, 110, 0.12), transparent 28%),
+        linear-gradient(180deg, #fafaf6 0%, #f0efe7 100%);
+    }
+
+    main {
+      width: min(1040px, calc(100% - 24px));
+      margin: 0 auto;
+      padding: 28px 0 56px;
+    }
+
+    .hero,
+    .problem {
+      border: 1px solid rgba(214, 211, 199, 0.9);
+      background: rgba(255, 254, 248, 0.94);
+      box-shadow: var(--shadow);
+    }
+
+    .hero {
+      margin-bottom: 20px;
+      padding: 28px;
+      border-radius: 28px;
+    }
+
+    .hero span {
+      display: inline-block;
+      margin-bottom: 12px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    h1,
+    h2 {
+      margin-top: 0;
+    }
+
+    h1 {
+      margin-bottom: 12px;
+      font-size: clamp(30px, 4vw, 46px);
+      line-height: 1.15;
+    }
+
+    .hero p,
+    .problem p {
+      margin: 0;
+      line-height: 1.8;
+      color: var(--muted);
+    }
+
+    .summary {
+      display: grid;
+      gap: 16px;
+      margin-top: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+
+    .summary-card {
+      padding: 16px 18px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--panel);
+    }
+
+    .summary-card strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 14px;
+      color: var(--accent);
+    }
+
+    .problem {
+      margin-top: 20px;
+      padding: 24px;
+      border-radius: 24px;
+    }
+
+    .problem h2 {
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    .tips {
+      margin: 16px 0 18px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: #f8fafc;
+      border: 1px solid #e5e7eb;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    .path {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 4px 8px;
+      border-radius: 8px;
+      background: rgba(15, 118, 110, 0.09);
+      color: var(--accent);
+      font-family: "SFMono-Regular", Consolas, monospace;
+      font-size: 0.95em;
+    }
+
+    pre {
+      margin: 0;
+      overflow-x: auto;
+      padding: 18px;
+      border-radius: 18px;
+      background: var(--code-bg);
+      color: #f9fafb;
+      font-size: 14px;
+      line-height: 1.8;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+      white-space: pre-wrap;
+    }
+
+    code,
+    input {
+      font-family: "SFMono-Regular", Consolas, monospace;
+    }
+
+    .blank {
+      width: 116px;
+      min-height: 30px;
+      margin: 0 3px;
+      padding: 4px 8px;
+      border: 1px solid #67e8f9;
+      border-radius: 8px;
+      background: #ecfeff;
+      color: #0f172a;
+      font: inherit;
+      outline: none;
+      vertical-align: baseline;
+    }
+
+    .blank.short {
+      width: 86px;
+    }
+
+    .blank.file {
+      width: 138px;
+    }
+
+    .blank:focus {
+      border-color: #2dd4bf;
+      box-shadow: 0 0 0 3px rgba(45, 212, 191, 0.22);
+    }
+
+    .blank.correct {
+      border-color: #22c55e;
+      background: #dcfce7;
+    }
+
+    .blank.incorrect {
+      border-color: #fb923c;
+      background: #ffedd5;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 12px;
+      padding: 12px 16px;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .primary {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .secondary {
+      background: #e5e7eb;
+      color: #111827;
+    }
+
+    .result {
+      display: none;
+      margin-top: 18px;
+      padding: 16px 18px;
+      border-radius: 16px;
+      line-height: 1.8;
+    }
+
+    .result.show {
+      display: block;
+    }
+
+    .result.correct {
+      border: 1px solid var(--ok-line);
+      background: var(--ok-bg);
+      color: #065f46;
+    }
+
+    .result.incorrect {
+      border: 1px solid var(--bad-line);
+      background: var(--bad-bg);
+      color: #9a3412;
+    }
+
+    .result strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 18px;
+    }
+
+    .solution {
+      display: none;
+      margin-top: 18px;
+    }
+
+    .solution.show {
+      display: block;
+    }
+
+    .footer-note {
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 14px;
+      text-align: center;
+    }
+
+    @media (max-width: 720px) {
+      main {
+        width: min(100%, calc(100% - 16px));
+        padding-top: 16px;
+      }
+
+      .hero,
+      .problem {
+        padding: 18px;
+        border-radius: 20px;
+      }
+
+      pre {
+        font-size: 13px;
+      }
+
+      .blank,
+      .blank.short,
+      .blank.file {
+        width: min(160px, 52vw);
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="hero">
+      <span>7주차 실습 문제</span>
+      <h1>GGUF 모델용 Modelfile 자동 생성</h1>
+      <p>
+        현재 디렉토리의 <code>*.gguf</code> 파일을 찾아 절대 경로를 만들고,
+        <code>FROM 절대경로/파일명</code> 한 줄을 <code>Modelfile</code>에 저장하는 Bash 스크립트를 완성해보세요.
+      </p>
+
+      <div class="summary">
+        <div class="summary-card">
+          <strong>작업 위치</strong>
+          /Users/cwohk/models/Hyperclova
+        </div>
+        <div class="summary-card">
+          <strong>대상 파일</strong>
+          HyperCLOVAX-SEED-Omni-8B-Q4_K_M.gguf
+        </div>
+        <div class="summary-card">
+          <strong>핵심 문법</strong>
+          배열, 조건문, 리디렉션, printf
+        </div>
+      </div>
+    </section>
+
+    <section class="problem">
+      <h2>문제. 빈칸을 채워 스크립트 완성하기</h2>
+      <p>
+        현재 디렉토리에 있는 GGUF 모델 파일을 배열로 담고, 첫 번째 모델 파일 경로를 사용해
+        <code>Modelfile</code>을 생성해야 합니다.
+      </p>
+      <div class="tips">
+        목표 결과:
+        <span class="path">FROM /Users/cwohk/models/Hyperclova/HyperCLOVAX-SEED-Omni-8B-Q4_K_M.gguf</span>
+      </div>
+
+      <pre><code>#!/bin/bash
+
+shopt -s <input class="blank" data-answer="nullglob" aria-label="빈칸 1" autocomplete="off" spellcheck="false">
+current_dir="$(<input class="blank short" data-answer="pwd" aria-label="빈칸 2" autocomplete="off" spellcheck="false"> -P)"
+models=("${current_dir}"/*.gguf)
+
+if [ "${#models[@]}" -eq 0 ]; then
+    echo "현재 디렉토리에 .gguf 파일이 없습니다."
+    exit 1
+fi
+
+model_file="${models[0]}"
+<input class="blank short" data-answer="printf" aria-label="빈칸 3" autocomplete="off" spellcheck="false"> 'FROM %s\n' "$model_file" &gt; <input class="blank file" data-answer="Modelfile" aria-label="빈칸 4" autocomplete="off" spellcheck="false">
+
+echo "Modelfile 생성 완료"
+cat Modelfile</code></pre>
+
+      <div class="actions">
+        <button id="check-answer" class="primary">채점하기</button>
+        <button id="reset-answer" class="secondary">다시 풀기</button>
+        <button id="show-answer" class="secondary">정답 보기</button>
+      </div>
+
+      <div id="result" class="result">
+        <strong id="result-title"></strong>
+        <div id="result-body"></div>
+      </div>
+
+      <div id="solution" class="solution">
+        <pre><code>#!/bin/bash
+
+shopt -s nullglob
+current_dir="$(pwd -P)"
+models=("${current_dir}"/*.gguf)
+
+if [ "${#models[@]}" -eq 0 ]; then
+    echo "현재 디렉토리에 .gguf 파일이 없습니다."
+    exit 1
+fi
+
+model_file="${models[0]}"
+printf 'FROM %s\n' "$model_file" &gt; Modelfile
+
+echo "Modelfile 생성 완료"
+cat Modelfile</code></pre>
+      </div>
+    </section>
+
+    <p class="footer-note">핵심은 현재 위치의 절대 경로와 파일명을 합쳐서, 리디렉션으로 새 파일에 정확히 쓰는 것입니다.</p>
+  </main>
+
+  <script>
+    const blanks = Array.from(document.querySelectorAll(".blank"));
+    const checkButton = document.getElementById("check-answer");
+    const resetButton = document.getElementById("reset-answer");
+    const showButton = document.getElementById("show-answer");
+    const result = document.getElementById("result");
+    const resultTitle = document.getElementById("result-title");
+    const resultBody = document.getElementById("result-body");
+    const solution = document.getElementById("solution");
+
+    function normalize(value) {
+      return value.trim();
+    }
+
+    function setResult(type, title, body) {
+      result.className = `result show ${type}`;
+      resultTitle.textContent = title;
+      resultBody.textContent = body;
+    }
+
+    checkButton.addEventListener("click", () => {
+      let correctCount = 0;
+
+      blanks.forEach((blank) => {
+        const isCorrect = normalize(blank.value) === blank.dataset.answer;
+        blank.classList.toggle("correct", isCorrect);
+        blank.classList.toggle("incorrect", !isCorrect);
+        blank.setAttribute("aria-invalid", String(!isCorrect));
+
+        if (isCorrect) {
+          correctCount += 1;
+        }
+      });
+
+      if (correctCount === blanks.length) {
+        setResult("correct", "정답입니다", "nullglob로 빈 매칭을 안전하게 처리하고, pwd -P로 절대 경로를 얻은 뒤 printf 결과를 Modelfile에 저장했습니다.");
+      } else {
+        setResult("incorrect", `${correctCount}/${blanks.length}개 정답`, "명령어 이름, 옵션, 출력 파일 이름을 다시 확인해보세요. Bash에서는 파일 이름의 대소문자도 구분합니다.");
+      }
+    });
+
+    resetButton.addEventListener("click", () => {
+      blanks.forEach((blank) => {
+        blank.value = "";
+        blank.classList.remove("correct", "incorrect");
+        blank.removeAttribute("aria-invalid");
+      });
+      result.className = "result";
+      resultTitle.textContent = "";
+      resultBody.textContent = "";
+      solution.classList.remove("show");
+    });
+
+    showButton.addEventListener("click", () => {
+      blanks.forEach((blank) => {
+        blank.value = blank.dataset.answer;
+        blank.classList.add("correct");
+        blank.classList.remove("incorrect");
+        blank.removeAttribute("aria-invalid");
+      });
+      solution.classList.add("show");
+      setResult("correct", "정답을 채웠습니다", "완성된 스크립트를 아래에서 확인할 수 있습니다.");
+    });
+  </script>
+</body>
+</html>
