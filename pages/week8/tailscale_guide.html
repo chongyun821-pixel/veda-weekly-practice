@@ -70,6 +70,14 @@
             color: #38a169;
             font-weight: bold;
         }
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -86,6 +94,8 @@
         <h2>윈도우(Windows) 설치</h2>
         <p><a href="https://tailscale.com/download/windows" class="link-blue" target="_blank">다운로드 링크</a></p>
         
+        <img src="tailscale 설치창.png" alt="Tailscale 설치 창">
+
         <h3>Tailnet에 로그인</h3>
         <p>설치 후 Tailscale을 실행합니다. 처음 실행하면 인증 URL이 출력되며, 이 URL을 브라우저에서 열어 PC를 계정에 연결합니다. 명령 프롬프트(CMD)에서 아래 명령어를 사용할 수도 있습니다.</p>
         <pre>tailscale up</pre>
@@ -126,6 +136,8 @@ cheongwoo@Rappa:~ $ ip addr
         <h2>관리 및 확인</h2>
         <p>연결에 문제가 있거나 등록된 기기 목록을 확인하려면 아래 관리자 페이지를 방문하세요.</p>
         <p><a href="https://login.tailscale.com/admin/machines" class="link-blue" target="_blank">관리자 페이지</a> (Tailscale Admin Console)</p>
+        
+        <img src="console_screen.png" alt="Tailscale 관리 콘솔 화면">
     </section>
 </div>
 
