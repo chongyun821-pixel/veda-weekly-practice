@@ -1,0 +1,55 @@
+<div style="margin: 0 auto; padding: 24px 20px; border: 1px solid #e5e7eb; border-radius: 18px; background: #ffffff; box-sizing: border-box;">
+<!-- 상단 요약 -->
+<div style="margin-bottom: 28px; padding: 18px 20px; border-radius: 14px; background: #f8fafc; border: 1px solid #e5e7eb;">
+<p style="margin: 0 0 10px 0; font-size: 13px; color: #6b7280;" data-ke-size="size16"><b>개발 환경 설정 가이드</b></p>
+<h2 style="margin: 0 0 14px 0; font-size: 26px; line-height: 1.4; color: #111827;" data-ke-size="size26">MacOS 라즈베리파이 크로스 컴파일 가이드</h2>
+<p style="margin: 0; font-size: 15px; line-height: 1.8; color: #374151;" data-ke-size="size16"><b>MacOS에서 <code>zig cc</code> 컴파일러를 활용하여 라즈베리파이(aarch64-linux-gnu)용으로 크로스 컴파일하는 과정을 소개합니다.</b></p>
+</div>
+
+<!-- 1. 개요 -->
+<h2 style="margin: 0 0 14px 0; padding-bottom: 10px; border-bottom: 2px solid #111827; font-size: 22px; color: #111827;" data-ke-size="size26">1. 개요</h2>
+<p style="margin: 0 0 14px 0; font-size: 15px; line-height: 1.9; color: #374151;" data-ke-size="size16">크로스 컴파일 자체는 <code>gcc</code> 대신 <code>zig cc -target aarch64-linux-gnu</code> 명령어를 사용하면 비교적 쉽게 진행됩니다. 하지만 라즈베리파이의 하드웨어를 제어하기 위해서는 <b>wiringPi 라이브러리</b>가 필수적이므로, 라즈베리파이에 설치된 헤더 파일과 라이브러리를 맥(Mac)으로 복사해 와야 합니다.</p>
+
+<div style="margin-bottom: 18px; padding: 16px 20px; border-radius: 12px; background: #f8fafc; border: 1px solid #e5e7eb;">
+<p style="margin: 0 0 8px 0; font-size: 15px; font-weight: bold; color: #1f2937;" data-ke-size="size16">💡 Homebrew로 zig 설치하기</p>
+<p style="margin: 0 0 8px 0; font-size: 14px; line-height: 1.8; color: #4b5563;" data-ke-size="size16">MacOS에서는 Homebrew를 이용해 간편하게 <code>zig</code>를 설치할 수 있습니다.</p>
+<pre class="bash" style="margin: 0; padding: 14px; border-radius: 10px; background: #111827; color: #f9fafb; font-size: 13px;"><code>brew install zig</code></pre>
+</div>
+
+<div style="margin-bottom: 24px; padding: 16px 20px; border-radius: 12px; background: #fff7ed; border: 1px solid #fed7aa;">
+<p style="margin: 0 0 8px 0; font-size: 15px; font-weight: bold; color: #9a3412;" data-ke-size="size16">📌 zig cc의 구조적 특징과 Sysroot 구성</p>
+<p style="margin: 0 0 8px 0; font-size: 14px; line-height: 1.8; color: #7c2d12;" data-ke-size="size16">일반적인 <code>gcc-aarch64-linux-gnu</code> 같은 크로스 컴파일러 툴체인을 설치하면 보통 <code>/usr/aarch64-linux-gnu/lib</code>와 같이 외부 라이브러리를 넣을 수 있는 명확한 타겟 폴더가 존재합니다.</p>
+<p style="margin: 0; font-size: 14px; line-height: 1.8; color: #7c2d12;" data-ke-size="size16">하지만 <code>zig cc</code>는 그런 방식을 사용하지 않습니다. <code>zig</code>는 내부적으로 glibc, musl 등의 다양한 표준 라이브러리 소스를 고유의 구조로 쪼개서(libc, include 등으로) 들고 있다가, 컴파일하는 순간에 필요한 타겟에 맞춰 동적으로 가상 루트(Sysroot)를 조합하여 <code>~/.cache/zig/</code> 같은 곳에 임시로 만들어냅니다. 따라서 wiringPi와 같은 외부 라이브러리를 직접 욱여넣을 고정된 타겟 폴더가 없으므로 별도의 로컬 폴더를 만들어 참조해야 합니다.</p>
+</div>
+
+<!-- 2. 방법 1: 로컬 디렉토리 참조 -->
+<h2 style="margin: 0 0 14px 0; padding-bottom: 10px; border-bottom: 2px solid #111827; font-size: 22px; color: #111827;" data-ke-size="size26">2. 로컬 디렉토리에 Sysroot 구성하기</h2>
+<p style="margin: 0 0 12px 0; font-size: 15px; line-height: 1.9; color: #374151;" data-ke-size="size16">임의의 사용자 폴더(예: <code>~/clib/aarch64-linux-gnu</code>)에 관련 파일들을 복사해 두고, 컴파일할 때마다 해당 경로를 명시적으로 참조하는 방식으로 진행합니다.</p>
+
+<h3 style="margin: 0 0 8px 0; font-size: 18px; color: #1f2937;" data-ke-size="size23">라즈베리파이에서 파일 가져오기</h3>
+<pre class="bash" style="margin: 0 0 18px 0; padding: 18px; border-radius: 14px; background: #111827; color: #f9fafb; overflow-x: auto; line-height: 1.8; font-size: 14px;"><code># 헤더 파일 복사
+scp -r &lt;계정&gt;@&lt;RPI주소&gt;:/home/&lt;계정&gt;/WiringPi/debian-template/wiringPi/usr/include .
+sudo cp -a include/* ~/clib/aarch64-linux-gnu/include/
+
+# 라이브러리 복사
+scp -r &lt;계정&gt;@&lt;RPI주소&gt;:/home/&lt;계정&gt;/WiringPi/debian-template/wiringPi/usr/lib .
+sudo cp -a lib/* ~/clib/aarch64-linux-gnu/lib/
+
+# crypt 라이브러리 복사 (wiringPi 라이브러리에서 필요함)
+scp -r &lt;계정&gt;@&lt;RPI주소&gt;:/usr/lib/aarch64-linux-gnu/libcrypt.so .
+sudo cp -a libcrypt.so ~/clib/aarch64-linux-gnu/lib/</code></pre>
+
+<h3 style="margin: 0 0 8px 0; font-size: 18px; color: #1f2937;" data-ke-size="size23">컴파일 실행</h3>
+<p style="margin: 0 0 12px 0; font-size: 15px; line-height: 1.9; color: #374151;" data-ke-size="size16">위에서 구성한 경로를 포함시켜 다음과 같이 컴파일할 수 있습니다. 매번 경로를 입력하는 것이 번거롭다면 환경 변수로 등록하여 사용할 수도 있습니다.</p>
+<pre class="bash" style="margin: 0 0 18px 0; padding: 18px; border-radius: 14px; background: #111827; color: #f9fafb; overflow-x: auto; line-height: 1.8; font-size: 14px;"><code># 기본 컴파일 시 (wiringPi 라이브러리를 직접 링크하는 경우)
+zig cc -target aarch64-linux-gnu -I. -I~/clib/aarch64-linux-gnu/include -L~/clib/aarch64-linux-gnu/lib main.c -o main -lwiringPi -lcrypt
+
+# 동적 라이브러리(dlopen)와 pthread를 사용하는 main.c 컴파일 시
+zig cc -target aarch64-linux-gnu -I. -I~/clib/aarch64-linux-gnu/include -L~/clib/aarch64-linux-gnu/lib main.c -o main -ldl -lpthread</code></pre>
+
+<div style="margin-bottom: 26px; padding: 18px 20px; border-radius: 12px; background: #eff6ff; border: 1px solid #bfdbfe;">
+<p style="margin: 0 0 8px 0; font-size: 15px; font-weight: bold; color: #1d4ed8;" data-ke-size="size16">참고: Makefile을 통한 자동화</p>
+<p style="margin: 0 0 8px 0; font-size: 15px; line-height: 1.9; color: #1e3a8a;" data-ke-size="size16">명령어를 일일이 입력하는 대신, <code>Makefile</code>에 설정값을 넣고 빌드하는 것을 선호합니다.</p>
+<p style="margin: 0; font-size: 14px; font-family: monospace; color: #1e40af; background: #dbeafe; padding: 4px 8px; border-radius: 6px; display: inline-block;"><a href="https://chongyun821-pixel.github.io/veda-weekly-practice/pages/week10/raspi/peripheral-control-via-dl/Makefile" target="_blank" rel="noopener noreferrer" style="color: #1d4ed8; text-decoration: underline;">예시 Makefile 다운로드 및 확인하기</a></p>
+</div>
+</div>

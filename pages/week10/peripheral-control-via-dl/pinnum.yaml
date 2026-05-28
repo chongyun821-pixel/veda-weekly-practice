@@ -1,0 +1,8 @@
+sda:
+  8
+sdc:
+  9
+led_out:
+  1: 26
+cds_in:
+  1: 2
